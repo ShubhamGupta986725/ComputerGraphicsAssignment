@@ -25,33 +25,7 @@ camera.position.setZ(50);
 camera.position.setY(50);
 
 let mixerJump;
-
-// const axesHelper = new THREE.AxesHelper(200);
-// scene.add( axesHelper );
-// axesHelper.setColors(0xfc0328, 0x0521f7, 0xfcf803);
-
-
-// var origin = new THREE.Vector3( 0, 0, 0 );
-// var length = 200;
-
-// var diry = new THREE.Vector3( 0, 1, 0 );
-// diry.normalize();
-// var hexy = 0x0521f7;
-
-// var dirx = new THREE.Vector3( 1, 0, 0 );
-// dirx.normalize();
-// var hexx = 0xfc0328;
-
-// var dirz = new THREE.Vector3( 0, 0, 1 );
-// dirz.normalize();
-// var hexz = 0xfcf803;
-
-// var arrowHelpery = new THREE.ArrowHelper( diry, origin, length, hexy );
-// scene.add( arrowHelpery );
-// var arrowHelperx = new THREE.ArrowHelper( dirx, origin, length, hexx );
-// scene.add( arrowHelperx );
-// var arrowHelperz = new THREE.ArrowHelper( dirz, origin, length, hexz );
-// scene.add( arrowHelperz );
+let mixerSwim;
 
 function sleepFor( sleepDuration ){
     var now = new Date().getTime();
@@ -124,64 +98,6 @@ function rotateRight(model, origModel){
 	origModel.rotation.x += 0.2;
 	origXRot += 0.2;	
 }	
-
-// function extendFrontLegs(model){
-// 	let iter = 10;
-// 	model.children[0].children[0].rotation.x = origXRot/(scaleFactor*scaleFactor)
-// 	model.children[0].children[0].rotation.z = origZRot/(scaleFactor*scaleFactor);
-// 	model.children[0].children[0].position.x = origX/(scaleFactor*scaleFactor);
-// 	model.children[0].children[0].position.z = origX/(scaleFactor*scaleFactor);
-
-// 	model.children[0].children[1].rotation.x = origXRot/(scaleFactor*scaleFactor);
-// 	model.children[0].children[1].rotation.z = origZRot/(scaleFactor*scaleFactor);
-// 	model.children[0].children[1].position.x = origX/(scaleFactor*scaleFactor);
-// 	model.children[0].children[1].position.z = origX/(scaleFactor*scaleFactor);
-	
-// 	model.children[10].position.x = origX/(scaleFactor*scaleFactor);
-// 	model.children[10].position.z = origZ/(scaleFactor*scaleFactor);
-// 	model.children[10].rotation.x = origX/(scaleFactor*scaleFactor);
-// 	model.children[10].rotation.z = origZRot/(scaleFactor*scaleFactor);
-
-// 	model.children[11].position.x = origX/(scaleFactor*scaleFactor);
-// 	model.children[11].position.z =origZ/(scaleFactor*scaleFactor);
-// 	model.children[11].rotation.x = origX/(scaleFactor*scaleFactor);
-// 	model.children[11].rotation.z = origZRot/(scaleFactor*scaleFactor);
-
-// 	for(let i=0; i<iter; i++){
-// 		model.children[0].children[0].rotation.x += 0.3/10;
-// 		model.children[0].children[0].rotation.y += 0.3/10;
-// 		model.children[0].children[0].rotation.z += -0.3/10;
-// 		model.children[0].children[0].position.x += -0.0017/10;
-// 		model.children[0].children[0].position.y += 0.0018/10;
-// 		model.children[0].children[0].position.z += 0.003/10;
-
-
-// 		model.children[0].children[1].rotation.x += 0.3/10;
-// 		model.children[0].children[1].rotation.y += -0.3/10;
-// 		model.children[0].children[1].rotation.z += -0.3/10;
-// 		model.children[0].children[1].position.x += -0.0017/10;
-// 		model.children[0].children[1].position.y += 0.0018/10;
-// 		model.children[0].children[1].position.z += -0.003/10;
-
-
-// 		model.children[10].position.x += 0.0045/10;
-// 		model.children[10].position.y += -0.0015/10;
-// 		model.children[10].position.z += -0.0045/10;
-// 		model.children[10].rotation.x += 0/10;
-// 		model.children[10].rotation.y += 2.5/10;
-// 		model.children[10].rotation.z += 1.5/10;
-
-
-// 		model.children[11].position.x += 0.004/10;
-// 		model.children[11].position.y += -0.0012/10;
-// 		model.children[11].position.z += 0.005/10;
-// 		model.children[11].rotation.x += 0/10;
-// 		model.children[11].rotation.y += 3.5/10;
-// 		model.children[11].rotation.z += 4.5/10;
-// 		sleepFor(1);
-// 		console.log(i);
-// 	}
-// }
 
 function extendFrontLegs(model){
 	model.children[0].children[0].rotation.x = 0.3 + origXRot/(scaleFactor*scaleFactor);
@@ -288,13 +204,13 @@ function jump(model, origModel){
 function swim(model, origModel){
 	scene.remove(model);
 	const jumper = new GLTFLoader();
-	jumper.load( 'Jump.glb', function ( gltf ) {
-		var modelJ = gltf.scene;
-		scaleModel(modelJ);
-		scene.add( modelJ );
-		playAnimations(gltf, modelJ);
+	jumper.load( 'Swim.glb', function ( gltf ) {
+		var modelS = gltf.scene;
+		scaleModel(modelS);
+		scene.add( modelS );
+		playAnimations(gltf, modelS);
 		setTimeout(function(){
-			scene.remove(modelJ);
+			scene.remove(modelS);
 		}
 		, 2000);
 	});
@@ -405,9 +321,15 @@ frog.load( 'FrogFinal.glb', function ( gltf ) {
 	});
 	document.addEventListener('keyup', event => {
 		if (event.key === 'q') {
-			scene.remove(model);
-			model = origModel.clone();
-			scene.add(model);
+			let temp = true;
+			while(temp){
+				setTimeout(function(){
+					scene.remove(model);
+					model = origModel.clone();
+					scene.add(model);}, 
+				1800);
+				temp = false;
+			}
 		}
 		if (event.key === 'j') {
 			let temp = true;
@@ -461,6 +383,9 @@ function animate(){
 	renderer.render(scene, camera);
 	controls.update();
 	if(mixerJump){
+		mixerJump.update(clock.getDelta());
+	}
+	if(mixerSwim){
 		mixerJump.update(clock.getDelta());
 	}
 }
