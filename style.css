@@ -1,0 +1,29 @@
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+button {
+  height: 40px;
+  width: 150px;
+  position: absolute;
+  background-color: white;
+  color: black;
+  border: 2px solid cyan;
+}
+
+
+h2 {
+  height: 70px;
+  width: 180px;
+  position: absolute;
+  background-color: white;
+  color: black;
+  border: 2px solid cyan;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+body {
+  overflow: hidden;
+}
